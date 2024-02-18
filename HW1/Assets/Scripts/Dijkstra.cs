@@ -21,8 +21,44 @@ public class Dijkstra : MonoBehaviour
     {
         // Starts the stopwatch.
         watch.Start();
-        
+
         // Add your Dijkstra code here.
+
+        // Initialize record for start node.
+        NodeRecord startRecord = new NodeRecord();
+        startRecord.node = start;
+        startRecord.connection = null;
+        startRecord.costSoFar = 0;
+
+        // Initialize open and closed lists.
+        List<NodeRecord> openNodes = new List<NodeRecord>();
+        openNodes.Add(startRecord);
+        List<NodeRecord> closedNodes = new List<NodeRecord>();
+
+        // Iterate through processing each node.
+        while (openNodes.Count > 0)
+        {
+            // Find smallest element in open list.
+            NodeRecord current = GetSmallest(openNodes);
+
+            // If coloring tiles, update tile color.
+            if (colorTiles) { current.ColorTile(activeColor); }
+
+            // Pause animation to show new active tile.
+            yield return new WaitForSeconds(waitTime);
+
+            // If current is the goal node, then leave the loop.
+            if (current.node == end) { break; }
+
+            // Else, get its outgoing connections.
+            List<NodeRecord> connections = current.connection;
+
+            // Loop through each connection in turn.
+            foreach (NodeRecord connection in connections)
+            {
+
+            }
+        }
 
         // Stops the stopwatch.
         watch.Stop();
@@ -37,6 +73,18 @@ public class Dijkstra : MonoBehaviour
 
         yield return null;
     }
+
+    public static NodeRecord GetSmallest(List<NodeRecord> nodeArray)
+    {
+        NodeRecord current = nodeArray[0];
+
+        foreach (NodeRecord nodeToCheck in nodeArray)
+        {
+            if (nodeToCheck.costSoFar < current.costSoFar) { current = nodeToCheck; }
+        }
+
+        return current;
+    }
 }
 
 /// <summary>
@@ -48,6 +96,10 @@ public class NodeRecord
     public GameObject Tile { get; set; } = null;
 
     // Set the other class properties here.
+    public GameObject node { get; set; } = null;
+    public List<NodeRecord> connection { get; set; } = null;
+    public float costSoFar { get; set; } = 0;
+
 
     // Sets the tile's color.
     public void ColorTile (Color newColor)
