@@ -26,9 +26,9 @@ public class Dijkstra : MonoBehaviour
 
         // Initialize record for start node.
         NodeRecord startRecord = new NodeRecord();
-        startRecord.node = start;
-        startRecord.connection = null;
-        startRecord.costSoFar = 0;
+        startRecord.Node = start;
+        startRecord.Connection = null;
+        startRecord.CostSoFar = 0;
 
         // Initialize open and closed lists.
         List<NodeRecord> openNodes = new List<NodeRecord>();
@@ -48,15 +48,22 @@ public class Dijkstra : MonoBehaviour
             yield return new WaitForSeconds(waitTime);
 
             // If current is the goal node, then leave the loop.
-            if (current.node == end) { break; }
+            if (current.Node == end) { break; }
 
             // Else, get its outgoing connections.
-            List<NodeRecord> connections = current.connection;
+            List<NodeRecord> connections = current.Connection;
 
             // Loop through each connection in turn.
             foreach (NodeRecord connection in connections)
             {
+                NodeRecord endNode;
+                float endNodeCost = current.CostSoFar;
 
+                //if (closedNodes.Contains(endNode)) { continue; }
+                //else if (openNodes.Contains(endNode))
+                //{
+
+                //}
             }
         }
 
@@ -80,7 +87,7 @@ public class Dijkstra : MonoBehaviour
 
         foreach (NodeRecord nodeToCheck in nodeArray)
         {
-            if (nodeToCheck.costSoFar < current.costSoFar) { current = nodeToCheck; }
+            if (nodeToCheck.CostSoFar < current.CostSoFar) { current = nodeToCheck; }
         }
 
         return current;
@@ -96,9 +103,9 @@ public class NodeRecord
     public GameObject Tile { get; set; } = null;
 
     // Set the other class properties here.
-    public GameObject node { get; set; } = null;
-    public List<NodeRecord> connection { get; set; } = null;
-    public float costSoFar { get; set; } = 0;
+    public GameObject Node { get; set; } = null;
+    public List<NodeRecord> Connection { get; set; } = null;
+    public float CostSoFar { get; set; } = float.MaxValue;
 
 
     // Sets the tile's color.
