@@ -26,7 +26,7 @@ public class Dijkstra : MonoBehaviour
 
         // Initialize record for start node.
         NodeRecord startRecord = new NodeRecord();
-        startRecord.Node = start;
+        startRecord.Tile = start;
         startRecord.Connection = null;
         startRecord.CostSoFar = 0;
 
@@ -35,11 +35,13 @@ public class Dijkstra : MonoBehaviour
         openNodes.Add(startRecord);
         List<NodeRecord> closedNodes = new List<NodeRecord>();
 
+        NodeRecord current = new NodeRecord();
+
         // Iterate through processing each node.
         while (openNodes.Count > 0)
         {
             // Find smallest element in open list.
-            NodeRecord current = GetSmallest(openNodes);
+            current = GetSmallest(openNodes);
 
             // If coloring tiles, update tile color.
             if (colorTiles) { current.ColorTile(activeColor); }
@@ -48,23 +50,61 @@ public class Dijkstra : MonoBehaviour
             yield return new WaitForSeconds(waitTime);
 
             // If current is the goal node, then leave the loop.
-            if (current.Node == end) { break; }
+            if (current.Tile == end) { break; }
 
             // Else, get its outgoing connections.
-            List<NodeRecord> connections = current.Connection;
+            List<GameObject> connections = new List<GameObject>();
 
             // Loop through each connection in turn.
-            foreach (NodeRecord connection in connections)
+            foreach (GameObject connection in connections)
             {
-                NodeRecord endNode;
-                float endNodeCost = current.CostSoFar;
+                // Get cost estimate for end node.
+                GameObject endNode = connection;
+                float endNodeCost = current.CostSoFar + 1;
 
-                //if (closedNodes.Contains(endNode)) { continue; }
-                //else if (openNodes.Contains(endNode))
-                //{
+                NodeRecord endNodeRecord;
 
-                //}
+                // Skip this node if closed.
+                if (ContainsNode(closedNodes, endNode)) { continue; }
+
+                // If node is open, check to see if route is worse than current route.
+                else if (ContainsNode(openNodes, endNode))
+                {
+                    endNodeRecord = FindNode(openNodes, endNode);
+                    if (endNodeRecord.CostSoFar <= endNodeCost) { continue; }
+                }
+
+                // Else, we have an unvisited node, thus make a record.
+                else
+                {
+                    endNodeRecord = new NodeRecord();
+                    endNodeRecord.Tile = endNode;
+                }
+
+                // Update end node record's cost and connection.
+                endNodeRecord.CostSoFar = endNodeCost;
+                endNodeRecord.Connection = connection;
+
+                // Update tile display, if displayCosts active.
+                if (displayCosts) { endNodeRecord.Display(endNodeCost);  }
+
+                // Add record to open nodes list.
+                openNodes.Add(endNodeRecord);
+
+                // Update open tile display, if displayCosts active.
+                if (colorTiles) { endNodeRecord.ColorTile(openColor); }
+
+                // Pause animation to show new open tile.
+                yield return new WaitForSeconds(waitTime);
             }
+
+            // Once finished looking at all connections of current node, put the record
+            // into the closed list and remove it from the open list.
+            openNodes.Remove(current);
+            closedNodes.Add(current);
+
+            // Update closed tile display, if displayCosts active.
+            if (colorTiles) current.ColorTile(closedColor);
         }
 
         // Stops the stopwatch.
@@ -77,6 +117,21 @@ public class Dijkstra : MonoBehaviour
         watch.Reset();
 
         // Determine whether Dijkstra found a path and print it here.
+
+        // Occurs if no goal was found or if we ran out of nodes. Thus, no solution.
+        if (current.Tile != end) { UnityEngine.Debug.Log("Dijkstra's Search Failed!");  }
+
+        else
+        {
+            // Work back along the path, accumulating the connections.
+            while (current.Tile != start)
+            {
+                
+            }
+
+            // Print the statistics.
+            UnityEngine.Debug.Log("Path Length: " + path.Count);
+        }
 
         yield return null;
     }
@@ -92,6 +147,26 @@ public class Dijkstra : MonoBehaviour
 
         return current;
     }
+
+    public static bool ContainsNode(List<NodeRecord> nodeArray, GameObject node)
+    {
+        foreach (NodeRecord record in nodeArray)
+        {
+            if (record.Tile == node) { return true; }
+        }
+
+        return false;
+    }
+
+    public static NodeRecord FindNode(List<NodeRecord> nodeArray, GameObject node)
+    {
+        foreach (NodeRecord record in nodeArray)
+        {
+            if (record.Tile == node) { return record; }
+        }
+
+        return null;
+    }
 }
 
 /// <summary>
@@ -101,10 +176,8 @@ public class NodeRecord
 {
     // The tile game object.
     public GameObject Tile { get; set; } = null;
-
     // Set the other class properties here.
-    public GameObject Node { get; set; } = null;
-    public List<NodeRecord> Connection { get; set; } = null;
+    public GameObject Connection { get; set; } = null;
     public float CostSoFar { get; set; } = float.MaxValue;
 
 

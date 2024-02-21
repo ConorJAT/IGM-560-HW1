@@ -28,7 +28,7 @@ public class Graph : MonoBehaviour
     /// Initializes the tile game objects to represent the graph.
     /// Called at Start() from the interface class.
     /// </summary>
-    public void makeGraph()
+    public void makeGraph ()
     {
         // Initializes a new random variable.
         System.Random random = new System.Random();
@@ -104,7 +104,7 @@ public class Graph : MonoBehaviour
     }
 
     // Returns the tile at a given (x,y) position.
-    public GameObject getTile(int x, int y)
+    public GameObject getTile (int x, int y)
     {
         return graph[x, y];
     }
