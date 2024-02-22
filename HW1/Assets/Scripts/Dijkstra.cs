@@ -188,6 +188,7 @@ public class NodeRecord
     // Set the other class properties here.
     public NodeRecord Connection { get; set; } = null;
     public float CostSoFar { get; set; } = float.MaxValue;
+    public float EstimatedTotalCost { get; set; } = float.MaxValue;
 
 
     // Sets the tile's color.
