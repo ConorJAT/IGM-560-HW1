@@ -186,12 +186,19 @@ public class AStar : MonoBehaviour
 
     public static float Manhattan (GameObject start, GameObject tile, GameObject goal)
     {
-        return 0f;
+        float dx = Mathf.Abs(tile.transform.position.x - goal.transform.position.x);
+        float dy = Mathf.Abs(tile.transform.position.y - goal.transform.position.y);
+        return dx + dy;
     }
 
     public static float CrossProduct (GameObject start, GameObject tile, GameObject goal)
     {
-        return 0f;
+        float dx1 = tile.transform.position.x - goal.transform.position.x;
+        float dy1 = tile.transform.position.y - goal.transform.position.y;
+        float dx2 = start.transform.position.x - goal.transform.position.x;
+        float dy2 = start.transform.position.y - goal.transform.position.y;
+        float cross = Mathf.Abs(dx1 * dy2 - dy1 * dx2);
+        return Manhattan(start, tile, goal) + cross * (float)0.001;
     }
 
     public static NodeRecord GetSmallest(List<NodeRecord> nodeArray)
