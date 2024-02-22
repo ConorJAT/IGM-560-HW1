@@ -246,8 +246,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tile: {fileID: 7082161413745446940, guid: 8b12cf89ca8eae143bf6f79e4a3fd2ea, type: 3}
-  scale: 1
-  obstacleProbability: 0.1
+  scale: 2
+  obstacleProbability: 0.15
 --- !u!4 &625743947
 Transform:
   m_ObjectHideFlags: 0
@@ -275,7 +275,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d86e6f6961ee82548ba4bc2a789e8352, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waitTime: 1
+  waitTime: 0.05
   searchType: 0
   heuristicType: 2
   colorTiles: 1

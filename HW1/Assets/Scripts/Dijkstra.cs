@@ -53,10 +53,10 @@ public class Dijkstra : MonoBehaviour
             if (current.Tile == end) { break; }
 
             // Else, get its outgoing connections.
-            List<GameObject> connections = new List<GameObject>();
+            Dictionary<Direction, GameObject> connections = current.Tile.GetComponent<Node>().Connections;
 
             // Loop through each connection in turn.
-            foreach (GameObject connection in connections)
+            foreach (GameObject connection in connections.Values)
             {
                 // Get cost estimate for end node.
                 GameObject endNode = connection;
@@ -83,7 +83,7 @@ public class Dijkstra : MonoBehaviour
 
                 // Update end node record's cost and connection.
                 endNodeRecord.CostSoFar = endNodeCost;
-                endNodeRecord.Connection = connection;
+                endNodeRecord.Connection = current;
 
                 // Update tile display, if displayCosts active.
                 if (displayCosts) { endNodeRecord.Display(endNodeCost);  }
@@ -111,7 +111,7 @@ public class Dijkstra : MonoBehaviour
         watch.Stop();
 
         UnityEngine.Debug.Log("Seconds Elapsed: " + (watch.ElapsedMilliseconds / 1000f).ToString());
-        UnityEngine.Debug.Log("Nodes Expanded: " + "print the number of nodes expanded here.");
+        UnityEngine.Debug.Log("Nodes Expanded: " + (closedNodes.Count + openNodes.Count).ToString());
 
         // Reset the stopwatch.
         watch.Reset();
@@ -123,14 +123,23 @@ public class Dijkstra : MonoBehaviour
 
         else
         {
+            path = new Stack<NodeRecord>();
+
             // Work back along the path, accumulating the connections.
             while (current.Tile != start)
             {
-                
+                path.Push(current.Connection);
+                current = current.Connection;
+
+                // If colorTilesm update path tile color.
+                if (colorTiles) { current.ColorTile(pathColor); }
+
+                // Pause animation to show new path tile.
+                yield return new WaitForSeconds(waitTime);
             }
 
             // Print the statistics.
-            UnityEngine.Debug.Log("Path Length: " + path.Count);
+            UnityEngine.Debug.Log("Path Length: " + (path.Count).ToString());
         }
 
         yield return null;
@@ -177,7 +186,7 @@ public class NodeRecord
     // The tile game object.
     public GameObject Tile { get; set; } = null;
     // Set the other class properties here.
-    public GameObject Connection { get; set; } = null;
+    public NodeRecord Connection { get; set; } = null;
     public float CostSoFar { get; set; } = float.MaxValue;
 
 
