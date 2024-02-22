@@ -47,6 +47,8 @@ public class AStar : MonoBehaviour
             // Fine the smallest element in open list.
             current = GetSmallest(openNodes);
 
+            if (current.Connection != null && current.Connection.EstimatedTotalCost > current.EstimatedTotalCost) { continue; }
+
             // If colorTiles, update tile color.
             if (colorTiles) { current.ColorTile(activeColor); }
 
@@ -197,7 +199,7 @@ public class AStar : MonoBehaviour
         float dy1 = tile.transform.position.y - goal.transform.position.y;
         float dx2 = start.transform.position.x - goal.transform.position.x;
         float dy2 = start.transform.position.y - goal.transform.position.y;
-        float cross = Mathf.Abs(dx1 * dy2 - dy1 * dx2);
+        float cross = Mathf.Abs((dx1 * dy2) - (dy1 * dx2));
         return Manhattan(start, tile, goal) + cross * (float)0.001;
     }
 

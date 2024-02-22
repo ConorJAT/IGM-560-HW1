@@ -119,7 +119,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 39
+  controlID: 87
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -415,7 +415,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 429b0000
       m_LastClickedID: 39746
-      m_ExpandedIDs: eaccfeff16cefeff
+      m_ExpandedIDs: a083fdff3494fdffd4ccfeff16cefeff429b0000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -1025,7 +1025,7 @@ MonoBehaviour:
   m_LastFolders:
   - Assets/Scripts
   m_LastFoldersGridSize: -1
-  m_LastProjectPath: C:\Users\Conor\Documents\IGME 560\IGM-560-HW1\HW1
+  m_LastProjectPath: C:\Users\conor\OneDrive\Documents\IGM 560\IGM-560-HW1\HW1
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
