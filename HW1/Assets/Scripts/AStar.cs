@@ -29,7 +29,8 @@ public class AStar : MonoBehaviour
         startRecord.Tile = start;
         startRecord.Connection = null;
         startRecord.CostSoFar = 0;
-        startRecord.EstimatedTotalCost = heuristic(start, startRecord.Tile, end);
+        //startRecord.EstimatedTotalCost = heuristic(start, startRecord.Tile, end);
+        startRecord.EstimatedTotalCost = 0;
 
         // Retrieve number used to scale the game world tiles.
         float scale = startRecord.Tile.transform.localScale.x;
@@ -115,7 +116,8 @@ public class AStar : MonoBehaviour
                 // Update cost, estimate and connection of endNodeRecord.
                 endNodeRecord.CostSoFar = endNodeCost;
                 endNodeRecord.Connection = current;
-                endNodeHeuristic += endNodeCost;
+                endNodeRecord.EstimatedTotalCost = endNodeCost + endNodeHeuristic;
+                // endNodeHeuristic += endNodeCost;
 
                 // If displayCosts, update tile display.
                 if (displayCosts) { endNodeRecord.Display(endNodeCost); }
@@ -151,7 +153,7 @@ public class AStar : MonoBehaviour
         // Determine whether A* found a path and print it here.
 
         // Occurs if no goal was found or if we ran out of nodes. Thus, no solution.
-        if (current.Tile != end) { UnityEngine.Debug.Log("Dijkstra's Search Failed!"); }
+        if (current.Tile != end) { UnityEngine.Debug.Log("A* Search Failed!"); }
 
         else
         {
@@ -200,7 +202,7 @@ public class AStar : MonoBehaviour
         float dx2 = start.transform.position.x - goal.transform.position.x;
         float dy2 = start.transform.position.y - goal.transform.position.y;
         float cross = Mathf.Abs((dx1 * dy2) - (dy1 * dx2));
-        return Manhattan(start, tile, goal) + cross * (float)0.001;
+        return Manhattan(start, tile, goal) + (cross * 0.001f);
     }
 
     public static NodeRecord GetSmallest(List<NodeRecord> nodeArray)
@@ -209,7 +211,7 @@ public class AStar : MonoBehaviour
 
         foreach (NodeRecord nodeToCheck in nodeArray)
         {
-            if (nodeToCheck.CostSoFar < current.CostSoFar) { current = nodeToCheck; }
+            if (nodeToCheck.EstimatedTotalCost < current.EstimatedTotalCost) { current = nodeToCheck; }
         }
 
         return current;
