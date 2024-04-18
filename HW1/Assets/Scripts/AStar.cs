@@ -29,7 +29,6 @@ public class AStar : MonoBehaviour
         startRecord.Tile = start;
         startRecord.Connection = null;
         startRecord.CostSoFar = 0;
-        //startRecord.EstimatedTotalCost = heuristic(start, startRecord.Tile, end);
         startRecord.EstimatedTotalCost = 0;
 
         // Retrieve number used to scale the game world tiles.
@@ -47,8 +46,6 @@ public class AStar : MonoBehaviour
         {
             // Fine the smallest element in open list.
             current = GetSmallest(openNodes);
-
-            if (current.Connection != null && current.Connection.EstimatedTotalCost > current.EstimatedTotalCost) { continue; }
 
             // If colorTiles, update tile color.
             if (colorTiles) { current.ColorTile(activeColor); }
@@ -170,8 +167,6 @@ public class AStar : MonoBehaviour
 
                 // Pause animation to show new path tile.
                 yield return new WaitForSeconds(waitTime);
-
-                
             }
 
             // Print search statistics.
